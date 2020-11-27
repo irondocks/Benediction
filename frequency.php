@@ -1,5 +1,4 @@
 <?php
-
 $string = "Come near, you nations, to hear; and listen, you people: let the earth hear, and all that is therein; the world, and all things that come forth of it.";
 $string = "At the start, God created a heaven and a earth. 2The earth was without form and void, and darkness was over the face of the deep. And the Spirit of God was hovering over the face of the waters.";
 //$string = "At the start, is from where I began";
@@ -22,25 +21,29 @@ function colorImage(string $string)
     $srcHeight = $realHeight * 2;
 
     // create the larger source image
-    
+
 
     // create the real/final image
     $destImage = imagecreatetruecolor($realWidth,$realHeight);
     $img = \imagecreatetruecolor(50 * (strlen($string) + 1), 200); // bias can be Height of radiogram/sku (ex. 64,127,256) */
-    $img = imagecreatetruecolor(50 * (strlen($string) + 1),200);
+    $img = imagecreatetruecolor(50 * (strlen($string) + 1), 200);
     $white = imagecolorallocate($img, 50, 0, 0);
-    imageantialias($img,true);
-    imagesetthickness($img,3);
+    imageantialias($img, true);
+    imagesetthickness($img, 3);
     imagefill($img, 0, 0, 0xffffff);
     for ($x = 0; $x < strlen($string); $x+=2) {
-        if ($string[$x] == " ")
-            {$x--; continue;}
+        if ($string[$x] == " ") {
+            $x--;
+            continue;
+        }
         $first = ord($string[$x]);
         $second = ord($string[$x+1]);
         $lower = abs($first - $second);
         $higher = abs($second - $first);
         $brush_color = ($first < $second) ? $higher : $lower << 8;
-        if ($first == $second) $brush_color = $first << 16;
+        if ($first == $second) {
+            $brush_color = $first << 16;
+        }
         if (strtolower($string[$x + 1]) < strtolower($string[$x])) {
             imagearc($img, ($x + 1) * 50, 100, 75, 100, 58, 0, $brush_color);
         }
@@ -60,15 +63,13 @@ function colorImage(string $string)
         if (strtolower($string[$x + 1]) == strtolower($string[$x])) {
             imagearc($img, ($x) * 100, 100, 50, 100, 90, 0, $brush_color);
         }
-
     }
     for ($x = 0; $x < strlen($string); $x++) {
         imagestring($img, 25, (($x + 1) * 50), 150, strtolower($string[$x]), 0xFF0000);
-
     }
     //imagecopyresampled($destImage,$srcImage,0,0,0,0,
     //    $realWidth,$realHeight,$srcWidth,$srcHeight);
-    \imagepng($img, "x.png");
+    imagepng($img, "x.png");
     echo "<img src='x.png'/>";
 }
 colorImage($string);
